@@ -48,15 +48,15 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                Input(component_id='site-dropdown', component_property='value')
 )
 # Add computation to callback function and return graph
-def select(inputt):
-    if inputt == 'All Sites':
+def select(x):
+    if x == 'All Sites':
         new_df = spacex_df.groupby(['Launch Site'])["class"].sum().to_frame()
         new_df = new_df.reset_index()
         fig = px.pie(new_df, values='class', names='Launch Site', title='Total Success Launches by Site')
     else:
-        new_df = spacex_df[spacex_df["Launch Site"] == inputt]["class"].value_counts().to_frame()
+        new_df = spacex_df[spacex_df["Launch Site"] == x]["class"].value_counts().to_frame()
         new_df["name"] = ["Failure", "Success"]
-        fig = px.pie(new_df, values='class', names='name', title='Total Success Launches for ' + inputt)
+        fig = px.pie(new_df, values='class', names='name', title='Total Success Launches for ' + x)
     return fig
 
 # TASK 4:
@@ -76,7 +76,6 @@ def scatter(input1, input2):
         new_df = spacex_df[spacex_df["Launch Site"] == input1]
         new_df2 = new_df[new_df["Payload Mass (kg)"] >= input2[0]]
         new_df3 = new_df2[new_df["Payload Mass (kg)"] <= input2[1]]
-        #new_df2 = new_df[new_df["Payload Mass (kg)"] >= input2[0] & new_df["Payload Mass (kg)"] <= input2[1]]
         fig2 = px.scatter(new_df3, y="class", x="Payload Mass (kg)", color="Booster Version Category")
     return fig2
 
